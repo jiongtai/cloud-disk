@@ -7,7 +7,10 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jordan-wright/email"
+	uuid "github.com/satori/go.uuid"
+	"math/rand"
 	"net/smtp"
+	"time"
 )
 
 func Md5(s string) string {
@@ -40,4 +43,18 @@ func MailSendCode(emailAddress, code string) error {
 		return err
 	}
 	return nil
+}
+
+func RandCode() string {
+	s := "1234567890"
+	code := ""
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < define.CodeLength; i++ {
+		code += string(s[rand.Intn(len(s))])
+	}
+	return code
+}
+
+func GetUUID() string {
+	return uuid.NewV4().String()
 }
