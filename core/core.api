@@ -1,63 +1,82 @@
 service core-api {
-    @handler UserLogin
-    post /user/login (LogicRequest) returns (LoginReply)
+	@handler UserLogin
+	post /user/login (LogicRequest) returns (LoginReply)
+	
+	@handler UserDetail
+	get /user/detail (UserDetailRequest) returns (UserDetailReply)
+	
+	@handler MailCodeSendRegister
+	post /mail/code/send/register (MailCodeSendRegisterRequest) returns (MailCodeSendRegisterReply)
+	
+	@handler UserRegister
+	post /user/register (UserRegisterRequest) returns (UserRegisterReply)
+}
 
-    @handler UserDetail
-    get /user/detail (UserDetailRequest) returns (UserDetailReply)
+@server(
+	middleware : Auth
+)
+service core-api {
+	@handler FileUpload
+	post /file/upload (FileUploadRequest) returns (FileUploadReply)
+	@handler UserRepositorySave
+	post /user/repository/save (UserRepositorySaveRequest) returns (UserRepositorySaveReply)
+}
 
-    @handler MailCodeSendRegister
-    post /mail/code/send/register (MailCodeSendRegisterRequest) returns (MailCodeSendRegisterReply)
+type UserRepositorySaveRequest {
+	ParentId           int64  `json:"parentId"`
+	RepositoryIdentity string `json:" repositoryIdentity"`
+	Ext                string `json:"ext"`
+	Name               string `json:"name"`
+}
 
-    @handler UserRegister
-    post /user/register (UserRegisterRequest) returns (UserRegisterReply)
-
-    @handler FileUpload
-    post /file/upload (FileUploadRequest) returns (FileUploadReply)
+type UserRepositorySaveReply {
 }
 
 type LogicRequest {
-    Name string `json:"name"`
-    Password string `json:"password"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
 }
 
 type LoginReply {
-    Token string `json:"token"`
+	Token string `json:"token"`
 }
 
 type UserDetailRequest {
-    Identity string `json:"identity"`
+	Identity string `json:"identity"`
 }
 
 type UserDetailReply {
-    Name string `json:"name"`
-    Email string `json:"email"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 type MailCodeSendRegisterRequest {
-    Email string `json:"email"`
+	Email string `json:"email"`
 }
 
 type MailCodeSendRegisterReply {
 }
 
 type UserRegisterRequest {
-    Name string `json:"name"`
-    Password string `json:"password"`
-    Email string `json:"email"`
-    Code string `json:"code"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+	Code     string `json:"code"`
 }
 
 type UserRegisterReply {
 }
 
 type FileUploadRequest {
-    Hash string `json:"hash,optional"`
-    Name string `json:"name,optional"`
-    Ext string `json:"ext,optional"`
-    Size int64 `json:"size,optional"`
-    Path string `json:"path,optional"`
+	Hash string `json:"hash,optional"`
+	Name string `json:"name,optional"`
+	Ext  string `json:"ext,optional"`
+	Size int64  `json:"size,optional"`
+	Path string `json:"path,optional"`
 }
 
 type FileUploadReply {
-    Identity string `json:"identity"`
+	Identity string `json:"identity"`
+	Ext      string `json:"ext"`
+	Name     string `json:"name"`
 }

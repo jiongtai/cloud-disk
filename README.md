@@ -2,7 +2,23 @@
 
 > 轻量级云盘系统，基于 go-zero、xorm、go-redis实现
 
-## 使用到的库以及安装命令：
+### 涉及模块：
+> 用户模块：
+>   - 密码登陆 done
+>   - 邮箱注册 done
+>   - 用户详情 done
+> 
+> 存储池模块：
+>   - 中心存储池资源管理 done
+>   - 文件上传 done
+>   - 个人存储池资源管理 done
+>   - 文件关联存储
+>   - 文件夹层级管理
+> 
+> 文件共享模块：
+>   - 文件分享
+
+### 使用到的库以及安装命令：
 ```shell
 // go-zero 库
 go get -u github.com/zeromicro/go-zero 
