@@ -24,6 +24,9 @@ go get github.com/go-redis/redis/v8
 // uuid 库
 go get github.com/satori/go.uuid
 
+// 腾讯云 COS SDK 包
+go get -u github.com/tencentyun/cos-go-sdk-v5
+
 cd core
 // 使用工具生成相关路由的 handler 跟 logic 代码
 goctl api go -api core.api -dir . -style go_zero
