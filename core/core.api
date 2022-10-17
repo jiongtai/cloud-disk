@@ -19,6 +19,16 @@ service core-api {
 	post /user/repository/save (UserRepositorySaveRequest) returns (UserRepositorySaveReply)
 	@handler UserFileList
 	get /user/file/list (UserFileListRequest) returns (UserFileListReply)
+	@handler UserFileNameUpdate
+	post /user/file/name/update (UserFileNameUpdateRequest) returns (UserFileNameUpdateReply)
+}
+
+type UserFileNameUpdateRequest {
+	Identity string `json:"identity"`
+	Name     string `json:"name"`
+}
+
+type UserFileNameUpdateReply {
 }
 
 type UserFileListRequest {
