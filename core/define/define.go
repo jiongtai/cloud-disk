@@ -17,7 +17,7 @@ var JwtKey = "cloud-disk-key"
 var MailPassword =
 var FromMailAddress =
 var FromMailName =
-var MailHost =
+var MailHost = 
 
 // CodeLength 验证码长度
 var CodeLength = 6
@@ -34,3 +34,5 @@ var CosSecretKey =
 
 // PageSize 分页默认条数
 var PageSize = 20
+
+var DateTime = "2006-15-02 15:04:05"
