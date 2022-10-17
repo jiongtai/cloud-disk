@@ -1,13 +1,10 @@
 service core-api {
 	@handler UserLogin
 	post /user/login (LogicRequest) returns (LoginReply)
-	
 	@handler UserDetail
 	get /user/detail (UserDetailRequest) returns (UserDetailReply)
-	
 	@handler MailCodeSendRegister
 	post /mail/code/send/register (MailCodeSendRegisterRequest) returns (MailCodeSendRegisterReply)
-	
 	@handler UserRegister
 	post /user/register (UserRegisterRequest) returns (UserRegisterReply)
 }
@@ -20,6 +17,28 @@ service core-api {
 	post /file/upload (FileUploadRequest) returns (FileUploadReply)
 	@handler UserRepositorySave
 	post /user/repository/save (UserRepositorySaveRequest) returns (UserRepositorySaveReply)
+	@handler UserFileList
+	get /user/file/list (UserFileListRequest) returns (UserFileListReply)
+}
+
+type UserFileListRequest {
+	Id   int64 `json:"id, optional"`
+	Page int   `json:"page, optional"`
+	Size int   `json:"size,optional"`
+}
+
+type UserFileListReply {
+	List  []*UserFile `json:"list"`
+	Count int64       `json:"count"`
+}
+type UserFile {
+	Id                 int64  `json:"id"`
+	Identity           string `json:"identity"`
+	RepositoryIdentity string `json:"repository_identity"`
+	Name               string `json:"name"`
+	Ext                string `json:"ext"`
+	Path               string `json:"path"`
+	Size               int64  `json:"size"`
 }
 
 type UserRepositorySaveRequest {

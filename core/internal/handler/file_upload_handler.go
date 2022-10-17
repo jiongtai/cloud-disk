@@ -40,7 +40,7 @@ func FileUploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 		if get {
-			httpx.OkJson(w, &types.FileUploadReply{Identity: rp.Identity})
+			httpx.OkJson(w, &types.FileUploadReply{Identity: rp.Identity, Ext: rp.Ext, Name: rp.Name})
 			return
 		}
 

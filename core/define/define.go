@@ -31,3 +31,6 @@ var CosSecretId =
 
 // CosSecretKey 腾讯云COS，登录访问管理控制台查看密钥，https://console.cloud.tencent.com/cam/capi
 var CosSecretKey =
+
+// PageSize 分页默认条数
+var PageSize = 20
