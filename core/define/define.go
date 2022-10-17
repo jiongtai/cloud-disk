@@ -36,3 +36,6 @@ var CosSecretKey =
 var PageSize = 20
 
 var DateTime = "2006-15-02 15:04:05"
+
+var TokenExpire = 3600
+var RefreshTokenExpire = 7200

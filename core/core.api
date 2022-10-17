@@ -9,6 +9,15 @@ service core-api {
 	post /user/register (UserRegisterRequest) returns (UserRegisterReply)
 	@handler ShareBasicDetail
 	post /share/basic/detail (ShareBasicDetailRequest) returns (ShareBasicDetailReply)
+	// 刷新Authorization
+	@handler  RefreshAuthorization
+	post /refresh/authorization(RefreshAuthorizationRequest) returns (RefreshAuthorizationReply)
+}
+
+type RefreshAuthorizationRequest {}
+type RefreshAuthorizationReply {
+	Token        string `json:"token"`
+	RefreshToken string `json:"refresh_token"`
 }
 
 @server(
@@ -131,7 +140,8 @@ type LogicRequest {
 }
 
 type LoginReply {
-	Token string `json:"token"`
+	Token        string `json:"token"`
+	RefreshToken string `json:"refresh_token"`
 }
 
 type UserDetailRequest {
