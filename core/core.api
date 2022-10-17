@@ -31,6 +31,17 @@ service core-api {
 	put /user/file/move (UserFileMoveRequest) returns (UserFileMoveReply)
 	@handler ShareBasicCreate
 	post /share/basic/create (ShareBasicCreateRequest) returns (ShareBasicCreateReply)
+	@handler ShareBasicSave
+	post /share/basic/save (ShareBasicSaveRequest) returns (ShareBasicSaveReply)
+}
+
+type ShareBasicSaveRequest {
+	RepositoryIdentity string `json:"repository_identity"`
+	ParentId           int    `json:"parent_id"`
+}
+
+type ShareBasicSaveReply {
+	Identity string `json:"identity"`
 }
 
 type ShareBasicDetailRequest {
