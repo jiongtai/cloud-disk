@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"bytes"
 	"cloud-disk/core/define"
 	"context"
 	"crypto/md5"
@@ -11,12 +12,15 @@ import (
 	"github.com/jordan-wright/email"
 	uuid "github.com/satori/go.uuid"
 	"github.com/tencentyun/cos-go-sdk-v5"
+	"io"
 	"math/rand"
 	"net/http"
 	"net/smtp"
 	"net/url"
 	"os"
 	"path"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -105,4 +109,68 @@ func CosUpload(r *http.Request) (string, error) {
 	}
 
 	return define.CosURL + "/" + key, nil
+}
+
+func InitCosChunkUpload(ext string) (string, string, error) {
+	u, _ := url.Parse(define.CosURL)
+	b := &cos.BaseURL{BucketURL: u}
+	client := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  os.Getenv(define.CosSecretId),
+			SecretKey: os.Getenv(define.CosSecretKey),
+		},
+	})
+	key := "cloud-disk/" + GetUUID() + ext
+	v, _, err := client.Object.InitiateMultipartUpload(context.Background(), key, nil)
+	if err != nil {
+		return "", "", err
+	}
+	return key, v.UploadID, nil
+}
+
+func CosChunkUpload(r *http.Request) (string, error) {
+	u, _ := url.Parse(define.CosURL)
+	b := &cos.BaseURL{BucketURL: u}
+	client := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  os.Getenv(define.CosSecretId),
+			SecretKey: os.Getenv(define.CosSecretKey),
+		},
+	})
+	key := r.Header.Get("key")
+	UploadID := r.Header.Get("upload_id")
+	file, _, err := r.FormFile("file")
+	partNumber, err := strconv.Atoi(r.PostForm.Get("part_number"))
+	if err != nil {
+		return "", err
+	}
+	buf := bytes.NewBuffer(nil)
+	io.Copy(buf, file)
+	resp, err := client.Object.UploadPart(
+		context.Background(), key, UploadID, partNumber, bytes.NewReader(buf.Bytes()), nil,
+	)
+	if err != nil {
+		return "", err
+	}
+	return strings.Trim(resp.Header.Get("ETag"), "\""), nil //Md5值
+}
+
+func CosChunkUploadComplete(key string, uploadId int, co []cos.Object) error {
+	u, _ := url.Parse(define.CosURL)
+	b := &cos.BaseURL{BucketURL: u}
+	client := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  os.Getenv(define.CosSecretId),
+			SecretKey: os.Getenv(define.CosSecretKey),
+		},
+	})
+	opt := &cos.CompleteMultipartUploadOptions{}
+	opt.Parts = append(opt.Parts, co...)
+	_, _, err := client.Object.CompleteMultipartUpload(
+		context.Background(), key, strconv.Itoa(uploadId), opt,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
 }

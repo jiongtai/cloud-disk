@@ -10,11 +10,12 @@ service core-api {
 	@handler ShareBasicDetail
 	post /share/basic/detail (ShareBasicDetailRequest) returns (ShareBasicDetailReply)
 	// 刷新Authorization
-	@handler  RefreshAuthorization
-	post /refresh/authorization(RefreshAuthorizationRequest) returns (RefreshAuthorizationReply)
+	@handler RefreshAuthorization
+	post /refresh/authorization (RefreshAuthorizationRequest) returns (RefreshAuthorizationReply)
 }
 
-type RefreshAuthorizationRequest {}
+type RefreshAuthorizationRequest {
+}
 type RefreshAuthorizationReply {
 	Token        string `json:"token"`
 	RefreshToken string `json:"refresh_token"`
@@ -42,6 +43,48 @@ service core-api {
 	post /share/basic/create (ShareBasicCreateRequest) returns (ShareBasicCreateReply)
 	@handler ShareBasicSave
 	post /share/basic/save (ShareBasicSaveRequest) returns (ShareBasicSaveReply)
+	@handler FileUploadPrepare
+	post /file/ipload/prepare (FileUploadPrepareRequest) returns (FileUploadPrepareReply)
+	@handler FileUploadChunk
+	post /file/upload/chunk (FileUploadChunkRequest) returns (FileUploadChunkReply)
+	@handler FileUploadChunkComplete
+	post /file/upload/chunk/complete (FileUploadChunkCompleteRequest) returns (FileUploadChunkCompleteReply)
+}
+
+type CosObject {
+	PartNumber int    `json:"part_number"`
+	Etag       string `json:"etag"`
+}
+
+type FileUploadChunkCompleteRequest {
+	Key        string      `json:"key"`
+	UploadId   int         `json:"upload_id"`
+	CosObjects []CosObject `json:"cos_objects"`
+}
+
+type FileUploadChunkCompleteReply {
+}
+
+type FileUploadChunkRequest {
+	Key        string `json:"key"`
+	UploadId   string `json:"upload_id"`
+	PartNumber int    `json:"part_number"`
+}
+
+type FileUploadChunkReply {
+	Etag string `json:"etag"`
+}
+
+type FileUploadPrepareRequest {
+	Md5  string `json:"md5"`
+	Name string `json:"name"`
+	Ext  string `json:"ext"`
+}
+
+type FileUploadPrepareReply {
+	Identity string `json:"identity"`
+	UploadId string `json:"upload_id"`
+	Key      string `json:"key"`
 }
 
 type ShareBasicSaveRequest {
@@ -79,13 +122,15 @@ type UserFileMoveRequest {
 	ParentIdentity string `json:"parent_identity"`
 }
 
-type UserFileMoveReply{}
+type UserFileMoveReply {
+}
 
 type UserFileDeleteRequest {
 	Identity string `json:"identity"`
 }
 
-type UserFileDeleteReply{}
+type UserFileDeleteReply {
+}
 
 type UserFolderCreateRequest {
 	Name     string `json:"name"`

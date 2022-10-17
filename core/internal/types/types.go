@@ -9,6 +9,42 @@ type RefreshAuthorizationReply struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
+type CosObject struct {
+	PartNumber int    `json:"part_number"`
+	Etag       string `json:"etag"`
+}
+
+type FileUploadChunkCompleteRequest struct {
+	Key        string      `json:"key"`
+	UploadId   int         `json:"upload_id"`
+	CosObjects []CosObject `json:"cos_objects"`
+}
+
+type FileUploadChunkCompleteReply struct {
+}
+
+type FileUploadChunkRequest struct {
+	Key        string `json:"key"`
+	UploadId   string `json:"upload_id"`
+	PartNumber int    `json:"part_number"`
+}
+
+type FileUploadChunkReply struct {
+	Etag string `json:"etag"`
+}
+
+type FileUploadPrepareRequest struct {
+	Md5  string `json:"md5"`
+	Name string `json:"name"`
+	Ext  string `json:"ext"`
+}
+
+type FileUploadPrepareReply struct {
+	Identity string `json:"identity"`
+	UploadId string `json:"upload_id"`
+	Key      string `json:"key"`
+}
+
 type ShareBasicSaveRequest struct {
 	RepositoryIdentity string `json:"repository_identity"`
 	ParentId           int    `json:"parent_id"`

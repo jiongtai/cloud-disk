@@ -94,6 +94,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/share/basic/save",
 					Handler: ShareBasicSaveHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/file/ipload/prepare",
+					Handler: FileUploadPrepareHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/file/upload/chunk",
+					Handler: FileUploadChunkHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/file/upload/chunk/complete",
+					Handler: FileUploadChunkCompleteHandler(serverCtx),
+				},
 			}...,
 		),
 	)
