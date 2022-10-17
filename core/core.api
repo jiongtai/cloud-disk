@@ -7,6 +7,8 @@ service core-api {
 	post /mail/code/send/register (MailCodeSendRegisterRequest) returns (MailCodeSendRegisterReply)
 	@handler UserRegister
 	post /user/register (UserRegisterRequest) returns (UserRegisterReply)
+	@handler ShareBasicDetail
+	post /share/basic/detail (ShareBasicDetailRequest) returns (ShareBasicDetailReply)
 }
 
 @server(
@@ -27,6 +29,29 @@ service core-api {
 	post /user/file/delete (UserFileDeleteRequest) returns (UserFileDeleteReply)
 	@handler UserFileMove
 	put /user/file/move (UserFileMoveRequest) returns (UserFileMoveReply)
+	@handler ShareBasicCreate
+	post /share/basic/create (ShareBasicCreateRequest) returns (ShareBasicCreateReply)
+}
+
+type ShareBasicDetailRequest {
+	Identity string `json:"identity"`
+}
+
+type ShareBasicDetailReply {
+	Name               string `json:"name"`
+	Ext                string `json:"ext"`
+	Size               int    `json:"size"`
+	Path               string `json:"path"`
+	RepositoryIdentity string `json:" repository_identity"`
+}
+
+type ShareBasicCreateRequest {
+	UserRepositoryIdentity string `json:"user_repository_identity"`
+	ExpiredTime            int    `json:"expired_time"`
+}
+
+type ShareBasicCreateReply {
+	Identity string `json:"identity"`
 }
 
 type UserFileMoveRequest {
